@@ -2,14 +2,14 @@
 -- versions:
 -- 	protoc-gen-go v1.0
 -- 	protoc        v3.21.8
--- 	time          2023-08-05 22:39:38
+-- 	time          2023-08-06 09:13:16
 -- source: test.proto
 
 local proto = {}
 
----@class ETest
----@field public E_1 integer|string @0
----@field public E_2 integer|string @1
+---@class ETest @test ETest
+---@field public E_1 integer|string @0 comment E_1
+---@field public E_2 integer|string @1 
 
 ---@type ETest
 proto.ETest = {
@@ -23,16 +23,16 @@ proto.ETestStr = {
 	E_2 = "E_2",
 }
 
----@class Test
----@field A integer
----@field B string
----@field C float
----@field D ETest
----@field E string[]
----@field F table<integer,string>
----@field G Test_Unit
+---@class Test @test message
+---@field A integer @comment A
+---@field B string 
+---@field C float 
+---@field D ETest 
+---@field E string[] 
+---@field F table<integer,string> 
+---@field G Test_Unit 
 
----@class Test_Unit
----@field A integer
+---@class Test_Unit @
+---@field A integer @comment A
 
 return proto

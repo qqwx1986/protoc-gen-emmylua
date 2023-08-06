@@ -1,19 +1,22 @@
 syntax = "proto3";
 option go_package = "apps/protocol";
 
+//test ETest
 enum ETest {
-  E_1 = 0;
+  E_1 = 0; //comment E_1
   E_2 = 1;
 }
+
+//test message
 message Test {
-  int32 A = 1;
+  int32 A = 1; //comment A
   string B = 2;
   float  C = 3;
   ETest D = 4;
   repeated string E = 5;
   map<int32, string> F = 6;
   message Unit{
-    int32 A = 1;
+    int32 A = 1; //comment A
   }
   Unit G = 7;
 }

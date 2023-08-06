@@ -9,6 +9,7 @@ import (
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/pluginpb"
+	"strings"
 	"time"
 )
 
@@ -73,9 +74,10 @@ func genGeneratedHeader(gen *protogen.Plugin, g *protogen.GeneratedFile, f *file
 
 func genEnum(g *protogen.GeneratedFile, f *fileInfo, e *enumInfo) {
 	enumName := e.GoIdent.GoName
-	g.P("---@class ", enumName)
+	comments := trailingComment(e.Comments.Leading)
+	g.P("---@class ", enumName, " @", comments)
 	for _, value := range e.Values {
-		g.P("---@field public ", value.Desc.Name(), " integer|string @", value.Desc.Number())
+		g.P("---@field public ", value.Desc.Name(), " integer|string @", value.Desc.Number(), " ", trailingComment(value.Comments.Trailing))
 	}
 	g.P()
 	g.P("---@type ", enumName)
@@ -99,7 +101,8 @@ func genMessage(g *protogen.GeneratedFile, f *fileInfo, m *messageInfo) {
 	if m.Desc.IsMapEntry() {
 		return
 	}
-	g.P("---@class ", m.GoIdent.GoName)
+	comments := trailingComment(m.Comments.Leading)
+	g.P("---@class ", m.GoIdent.GoName, " @", comments)
 	genMessageFields(g, f, m)
 	g.P()
 }
@@ -114,7 +117,11 @@ func genMessageFields(g *protogen.GeneratedFile, f *fileInfo, m *messageInfo) {
 func genMessageField(g *protogen.GeneratedFile, f *fileInfo, m *messageInfo, field *protogen.Field, sf *structFields) {
 	goType := fieldGoType(g, f, field)
 	name := field.GoName
-	g.P("---@field ", name, " ", goType)
+	comments := trailingComment(field.Comments.Trailing)
+	if comments != "" {
+		comments = "@" + comments
+	}
+	g.P("---@field ", name, " ", goType, " ", comments)
 	sf.append(field.GoName)
 }
 
@@ -157,4 +164,20 @@ func fieldGoType(g *protogen.GeneratedFile, f *fileInfo, field *protogen.Field) 
 		return fmt.Sprintf("table<%v,%v>", keyType, valType)
 	}
 	return goType
+}
+
+// trailingComment is like protogen.Comments, but lacks a trailing newline.
+type trailingComment protogen.Comments
+
+func (c trailingComment) String() string {
+	s := strings.TrimSuffix(protogen.Comments(c).String(), "\n")
+	if strings.Contains(s, "\n") {
+		// We don't support multi-lined trailing comments as it is unclear
+		// how to best render them in the generated code.
+		return ""
+	}
+	if len(s) > 2 {
+		return s[2:]
+	}
+	return s
 }
