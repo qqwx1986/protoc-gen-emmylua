@@ -105,6 +105,7 @@ func genMessage(g *protogen.GeneratedFile, f *fileInfo, m *messageInfo) {
 	g.P("---@class ", m.GoIdent.GoName, " @", comments)
 	genMessageFields(g, f, m)
 	g.P()
+	g.P("proto.", m.GoIdent.GoName, " = ", "\"", m.GoIdent.GoName, "\"")
 }
 
 func genMessageFields(g *protogen.GeneratedFile, f *fileInfo, m *messageInfo) {

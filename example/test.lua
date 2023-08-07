@@ -2,7 +2,7 @@
 -- versions:
 -- 	protoc-gen-go v1.0
 -- 	protoc        v3.21.8
--- 	time          2023-08-06 09:13:16
+-- 	time          2023-08-07 16:16:21
 -- source: test.proto
 
 local proto = {}
@@ -32,7 +32,9 @@ proto.ETestStr = {
 ---@field F table<integer,string> 
 ---@field G Test_Unit 
 
+proto.Test = "Test"
 ---@class Test_Unit @
 ---@field A integer @comment A
 
+proto.Test_Unit = "Test_Unit"
 return proto
