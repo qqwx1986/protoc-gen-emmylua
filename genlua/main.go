@@ -57,7 +57,7 @@ func genGeneratedHeader(gen *protogen.Plugin, g *protogen.GeneratedFile, f *file
 		if v := gen.Request.GetCompilerVersion(); v != nil {
 			protocVersion = fmt.Sprintf("v%v.%v.%v", v.GetMajor(), v.GetMinor(), v.GetPatch())
 		}
-		g.P("-- \tprotoc-gen-go ", protocGenGoVersion)
+		g.P("-- \tprotoc-gen-emmylua ", protocGenGoVersion)
 		g.P("-- \tprotoc        ", protocVersion)
 		g.P("-- \ttime          ", time.Now().Format(time.DateTime))
 	}
